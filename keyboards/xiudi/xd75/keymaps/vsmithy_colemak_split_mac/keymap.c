@@ -36,7 +36,8 @@ enum custom_keycodes {
   PRINTF,
   COUT,
   CLASS,
-  QMK
+  QMK,
+  QMKFLASH
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -49,7 +50,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |---------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+-----------------+--------|
  * | BACKSP  | A      | R      | S      | T      | D      | 7      | 8      | 9      | H      | N      | E      | I      | O      | ENTER  |
  * |---------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------------------------+--------|
- * | LSHFT   | Z      | X      | C      | V      | B      | VOLU   | 0      | VOLD   | K      | M      | < ,    | > .    | UP     |  / ?   |
+ * | LSHFT   | Z      | X      | C      | V      | B      | VOLD   | 0      | VOLU   | K      | M      | < ,    | > .    | UP     |  / ?   |
  * |---------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+-----------------+--------+--------|
  * | L1      | LCTL  | ALT     | CMD    | SPACE  | MACROS | L2     | MACROS | MACROS | SPACE  | CMD    | ALT    | LEFT   | DN     | RIGHT  |
  * '---------------------------------------------------------------------------------------------------------------------------------------'
@@ -59,7 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   { KC_ESC,   KC_BRMD, KC_BRMU, LCTL(KC_UP), LCTL(KC_DOWN), KC_F11,     KC_1,     KC_2,    KC_3,            KC_BSLS,  KC_MINUS,   KC_EQL,    KC_LBRC,  KC_RBRC, KC_DEL  },
   { KC_TAB,   KC_Q,    KC_W,    KC_F,        KC_P,          KC_G,       KC_4,     KC_5,    KC_6,            KC_J,     KC_L,       KC_U,      KC_Y,     KC_SCLN, KC_QUOT },
   { KC_BSPC,  KC_A,    KC_R,    KC_S,        KC_T,          KC_D,       KC_7,     KC_8,    KC_9,            KC_H,     KC_N,       KC_E,      KC_I,     KC_O,    KC_ENT  },
-  { KC_LSFT,  KC_Z,    KC_X,    KC_C,        KC_V,          KC_B,       KC_VOLU,  KC_0,    KC_VOLD,         KC_K,     KC_M,       KC_COMM,   KC_DOT,   KC_UP,   KC_SLSH },
+  { KC_LSFT,  KC_Z,    KC_X,    KC_C,        KC_V,          KC_B,       KC_VOLD,  KC_0,    KC_VOLU,         KC_K,     KC_M,       KC_COMM,   KC_DOT,   KC_UP,   KC_SLSH },
   { MO(_L1),  KC_LCTL, KC_LALT, KC_LGUI,     KC_SPC,        NEWLINE,    MO(_L2),  CCOMPILE, BLOCK_COMMENT,  KC_SPC,   KC_RGUI,    KC_RALT,   KC_LEFT,  KC_DOWN, KC_RGHT },
  },
 
@@ -104,7 +105,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   { _______, _______, _______, _______, _______, _______, STRUCT,  FUNC,    CLASS,   _______, _______, _______,  _______, _______, _______  },
   { _______, _______, _______, _______, _______, _______, INCLUDE, DEFINE,  TERNARY, _______, _______, _______,  _______, _______, _______  },
   { _______, _______, _______, _______, _______, _______, ENUM,    COUT,    PRINTF,  _______, _______, _______,  _______, _______, _______  },
-  { _______, _______, _______, _______, _______, _______, QMK    , CONSOLE, _______, _______, _______, _______,  _______, _______, _______  },
+  { _______, _______, _______, _______, _______, _______, QMK    , CONSOLE, QMKFLASH, _______, _______, _______,  _______, _______, _______  },
   { _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______  },
  },
 };
@@ -183,6 +184,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				SEND_STRING("enum custom_keycodes {};");
 			} else {
 				// when ENUM is released
+			}
+			break;
+		case QMKFLASH:
+			if (record->event.pressed){
+				SEND_STRING("qmk compile -kb xiudi/xd75 -km vsmithy_colemak_split_mac");
+			} else {
+				// when QMKFLASH is released
 			}
 			break;
 		case COUT:
